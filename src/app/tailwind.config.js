@@ -6,7 +6,12 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        // এখানে 'poppins' নামে ফন্টটি যোগ করা হলো
+        poppins: ['var(--font-poppins)', 'sans-serif'],
+      },
+    },
   },
   plugins: [require('daisyui')],
 };
