@@ -25,7 +25,6 @@ export default function RootLayout({ children }) {
       data-theme="light"
       className={`${poppins.variable} h-full antialiased`}
     >
-      {/* className-এ ভুলটি এখানে ঠিক করা হয়েছে */}
       <body className={`${poppins.className} min-h-full flex flex-col`}>
         <main className="grow">
           {children}
