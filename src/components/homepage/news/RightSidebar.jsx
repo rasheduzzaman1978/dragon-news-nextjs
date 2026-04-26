@@ -1,6 +1,9 @@
 import React from "react";
 import { FaGithub, FaGoogle, FaFacebookF, FaTwitter, FaInstagram } from "react-icons/fa";
 import Image from "next/image";
+import swimmingImg from "@/assets/swimming.png";
+import classImg from "@/assets/class.png";
+import playgroundImg from "@/assets/playground.png";
 
 const RightSidebar = () => {
   return (
@@ -52,37 +55,37 @@ const RightSidebar = () => {
           {/* Card 1 */}
           <div className="bg-white p-3 rounded shadow text-center">
             <Image
-              src="/images/swimming.png"
+              src={swimmingImg}
               alt="swimming"
-              width={200}
-              height={120}
+              width={300}
+              height={300}
               className="mx-auto"
             />
-            <p className="mt-2 font-medium">Swimming</p>
+            {/* <p className="mt-2 font-medium">Swimming</p> */}
           </div>
 
           {/* Card 2 */}
           <div className="bg-white p-3 rounded shadow text-center">
             <Image
-              src="/images/class.png"
+              src={classImg}
               alt="class"
-              width={200}
-              height={120}
+              width={300}
+              height={300}
               className="mx-auto"
             />
-            <p className="mt-2 font-medium">Class</p>
+            {/* <p className="mt-2 font-medium">Class</p> */}
           </div>
 
           {/* Card 3 */}
           <div className="bg-white p-3 rounded shadow text-center">
             <Image
-              src="/images/playground.png"
+              src={playgroundImg}
               alt="playground"
-              width={200}
-              height={120}
+              width={300}
+              height={300}
               className="mx-auto"
             />
-            <p className="mt-2 font-medium">Play Ground</p>
+            {/* <p className="mt-2 font-medium">Play Ground</p> */}
           </div>
 
         </div>
