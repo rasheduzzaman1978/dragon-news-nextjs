@@ -4,19 +4,26 @@ import Link from "next/link";
 import { FaEye, FaStar } from "react-icons/fa";
 import { getNewsDetails } from "@/lib/data";
 
+export const generateMetadata = async ({params}) => {
+  const {id} = await params;
+  console.log(id, 'params');
+  const news = await getNewsDetails(id);
+  console.log(news, 'news');
 
+  return {
+    title: news.title,
+    description: news.details
+  };
+  
+};
 
 export default async function NewsDetailsPage({ params }) {
-  const { id } = await params;
+  const { id } = await params; // ✅ FIXED
 
   const news = await getNewsDetails(id);
 
   if (!news) {
-    return (
-      <div className="text-center mt-20 text-red-500 text-xl">
-        ❌ No Data Found
-      </div>
-    );
+    return notFound(); // ✅ better UX
   }
 
   return (
@@ -88,6 +95,14 @@ export default async function NewsDetailsPage({ params }) {
       <p className="text-lg leading-relaxed text-gray-700 text-justify">
         {news.details}
       </p>
+
+      {/* 🔴 Category Button (Functional) */}
+      <Link
+        href={`/category/${news.category_id}`}
+        className="inline-block mt-6 bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition"
+      >
+        ← All news in this category
+      </Link>
 
     </div>
   );
