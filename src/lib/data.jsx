@@ -26,3 +26,14 @@ export async function getNewsByCategoryId(id) {
     return [];
   }
 }
+
+
+export async function getNewsDetails(id) {
+  const res = await fetch(
+    `https://openapi.programming-hero.com/api/news/${id}`,
+    { cache: "no-store" }
+  );
+
+  const data = await res.json();
+  return data.data?.[0];
+}

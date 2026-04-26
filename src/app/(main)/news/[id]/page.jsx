@@ -2,16 +2,9 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { FaEye, FaStar } from "react-icons/fa";
+import { getNewsDetails } from "@/lib/data";
 
-async function getNewsDetails(id) {
-  const res = await fetch(
-    `https://openapi.programming-hero.com/api/news/${id}`,
-    { cache: "no-store" }
-  );
 
-  const data = await res.json();
-  return data.data?.[0];
-}
 
 export default async function NewsDetailsPage({ params }) {
   const { id } = await params;
@@ -27,7 +20,7 @@ export default async function NewsDetailsPage({ params }) {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-10">
+    <div className="max-w-4xl mx-auto px-4 py-10">
 
       {/* 🔙 Back */}
       <Link href="/" className="text-blue-500 hover:underline mb-6 inline-block">
