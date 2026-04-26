@@ -1,63 +1,100 @@
-import LeftSidebar from "@/components/homepage/news/LeftSidebar";
-import RightSidebar from "@/components/homepage/news/RightSidebar";
-import NewsCard from "@/components/homepage/news/NewsCard";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { FaEye, FaStar } from "react-icons/fa";
 
-async function getCategories() {
+async function getNewsDetails(id) {
   const res = await fetch(
-    "https://openapi.programming-hero.com/api/news/categories",
+    `https://openapi.programming-hero.com/api/news/${id}`,
     { cache: "no-store" }
   );
+
   const data = await res.json();
-  return data.data;
+  return data.data?.[0];
 }
 
-async function getNewsByCategoryId(id) {
-  const res = await fetch(
-    `https://openapi.programming-hero.com/api/news/category/${id}`,
-    { cache: "no-store" }
-  );
-  const data = await res.json();
-  return data.data;
-}
+export default async function NewsDetailsPage({ params }) {
+  const { id } = await params;
 
-export default async function CategoryPage({ params }) {
-  const { id } = params;
+  const news = await getNewsDetails(id);
 
-  const categories = await getCategories();
-  const news = await getNewsByCategoryId(id);
+  if (!news) {
+    return (
+      <div className="text-center mt-20 text-red-500 text-xl">
+        ❌ No Data Found
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto grid grid-cols-12 gap-4 my-10">
+    <div className="max-w-5xl mx-auto px-4 py-10">
 
-      {/* Left */}
-      <div className="col-span-3">
-        <LeftSidebar categories={categories} activeId={id} />
+      {/* 🔙 Back */}
+      <Link href="/" className="text-blue-500 hover:underline mb-6 inline-block">
+        ← Back to Home
+      </Link>
+
+      {/* 🖼️ Image */}
+      <div className="overflow-hidden rounded-2xl shadow-lg mb-6">
+        <Image
+          src={news.image_url}
+          alt={news.title}
+          width={1000}
+          height={500}
+          className="w-full h-[400px] object-cover"
+        />
       </div>
 
-      {/* Middle */}
-      <div className="col-span-6">
-        <h2 className="text-3xl font-bold mb-4">
-          Category: {id}
-        </h2>
+      {/* 📰 Title */}
+      <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-snug">
+        {news.title}
+      </h1>
 
-        {Array.isArray(news) && news.length > 0 ? (
-          <div className="flex flex-col gap-4">
-            {news.map((item) => (
-              <NewsCard key={item._id} item={item} />
+      {/* 👤 Author + Meta */}
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-4 mb-6">
+
+        <div className="flex items-center gap-3">
+          <Image
+            src={news.author?.img || "/default-avatar.png"}
+            alt="author"
+            width={40}
+            height={40}
+            className="rounded-full"
+          />
+          <div>
+            <p className="font-semibold text-sm">
+              {news.author?.name || "Unknown"}
+            </p>
+            <p className="text-xs text-gray-500">
+              {news.author?.published_date || "N/A"}
+            </p>
+          </div>
+        </div>
+
+        {/* ⭐ Rating + 👁 Views */}
+        <div className="flex items-center gap-4 text-sm text-gray-600">
+
+          <div className="flex items-center gap-1 text-orange-400">
+            {[...Array(Math.round(news.rating?.number || 0))].map((_, i) => (
+              <FaStar key={i} />
             ))}
+            <span className="text-gray-700 ml-1">
+              {news.rating?.number || 0}
+            </span>
           </div>
-        ) : (
-          <div className="text-center mt-10">
-            <p className="text-5xl">😕</p>
-            <p className="text-gray-500">No news found</p>
+
+          <div className="flex items-center gap-1">
+            <FaEye />
+            {news.total_view || 0}
           </div>
-        )}
+
+        </div>
       </div>
 
-      {/* Right */}
-      <div className="col-span-3">
-        <RightSidebar />
-      </div>
+      {/* 📄 Details */}
+      <p className="text-lg leading-relaxed text-gray-700 text-justify">
+        {news.details}
+      </p>
 
     </div>
   );
