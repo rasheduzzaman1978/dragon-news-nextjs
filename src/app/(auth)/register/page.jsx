@@ -1,8 +1,11 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
+   const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -11,16 +14,30 @@ export default function RegisterPage() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleRegisterFunc = (data) => {
-    console.log(data, "Register Data");
+  const handleRegisterFunc = async (data) => {
+  console.log(data, "Register Data");
 
-    const { name, photo, email, password } = data;
+  const { name, photo, email, password } = data;
 
-    console.log("Name:", name);
-    console.log("Photo URL:", photo);
-    console.log("Email:", email);
-    console.log("Password:", password);
-  };
+  const { data: res, error } = await authClient.signUp.email({
+    name,
+    email,
+    password,
+    image: photo,
+    callbackURL: "/",
+  });
+
+  console.log(res, error);
+
+  // ✅ redirect logic
+  if (res) {
+    router.push("/"); // Home page
+  }
+
+  if (error) {
+    console.log("Register Error:", error.message);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
