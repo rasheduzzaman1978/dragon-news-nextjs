@@ -17,25 +17,26 @@ export default function RegisterPage() {
   const handleRegisterFunc = async (data) => {
   console.log(data, "Register Data");
 
-  const { name, photo, email, password } = data;
+  const { name, email, password } = data;
 
   const { data: res, error } = await authClient.signUp.email({
     name,
     email,
     password,
-    image: photo,
+    image: data.photo,
     callbackURL: "/",
   });
 
-  console.log(res, error);
+  console.log("RES:", res);
+  console.log("ERROR:", error);
 
-  // ✅ redirect logic
   if (res) {
-    router.push("/"); // Home page
+    alert("Registration successful! Please check your email to verify your account.");
+    router.push("/login");
   }
 
   if (error) {
-    console.log("Register Error:", error.message);
+    alert("Registration failed: " + error.message);
   }
 };
 

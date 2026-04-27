@@ -1,3 +1,5 @@
+
+
 import Navbar from '@/components/shared/Navbar';
 import React, { Children } from 'react';
 import { monserrat } from '../layout';
