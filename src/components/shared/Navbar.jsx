@@ -1,17 +1,22 @@
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import useravatar from '@/assets/user.png';
-import NavLink from './NavLink';
+"use client";
+
+import React from "react";
+import Image from "next/image";
+import Link from "next/link";
+import useravatar from "@/assets/user.png";
+import NavLink from "./NavLink";
+import { authClient, useSession } from "@/lib/auth-client";
 
 const Navbar = () => {
+  const { data: session } = useSession();
+
   return (
     <nav className="bg-gray-100 shadow-sm">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         
-        {/* Left (Logo / Empty) */}
+        {/* Left */}
         <div className="text-xl font-semibold">
-          {/* Optional Logo */}
+          {/* Logo optional */}
         </div>
 
         {/* Center Menu */}
@@ -36,24 +41,35 @@ const Navbar = () => {
         {/* Right Side */}
         <div className="flex items-center gap-4">
           
-          {/* Avatar */}
-          <div className="w-9 h-9 rounded-full overflow-hidden border">
-            <Image
-              src={useravatar}
-              alt="User Avatar"
-              width={40}
-              height={40}
-            />
-          </div>
+          {session?.user ? (
+            <>
+              {/* Avatar */}
+              <div className="w-9 h-9 rounded-full overflow-hidden border">
+                <Image
+                  src={session.user.image || useravatar}
+                  alt="User Avatar"
+                  width={40}
+                  height={40}
+                />
+              </div>
 
-          {/* Login Button */}
-          <Link href="/login">
-            <button className="bg-gray-800 text-white px-4 py-1.5 rounded hover:bg-purple-600 transition">
-              Login
-            </button>
-          </Link>
+              {/* Logout */}
+              <button
+                onClick={() => authClient.signOut()}
+                className="bg-red-500 text-white px-4 py-1.5 rounded hover:bg-red-600 transition"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <Link href="/login">
+              <button className="bg-gray-800 text-white px-4 py-1.5 rounded hover:bg-purple-600 transition">
+                Login
+              </button>
+            </Link>
+          )}
+
         </div>
-
       </div>
     </nav>
   );

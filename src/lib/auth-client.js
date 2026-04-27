@@ -5,4 +5,5 @@ export const authClient = createAuthClient({
 });
 
 // ✅ এখান থেকেই destructure করো
-export const { signIn, signUp, useSession } = authClient;
+
+export const { signIn, signUp, signOut, useSession } = authClient;
