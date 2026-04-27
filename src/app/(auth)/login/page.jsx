@@ -1,7 +1,9 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function LoginPage() {
   const {
@@ -12,9 +14,24 @@ export default function LoginPage() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLoginFunc = (data) => {
+  const handleLoginFunc = async (data) => {
     console.log(data, "Login Data");
-  };
+
+    const { data: res, error } = await authClient.signIn.email({
+    email: data.email, // required
+    password: data.password, // required
+    rememberMe: true,
+    callbackURL: '/',
+  });
+
+    console.log("RES:", res);
+    console.log("ERROR:", error);
+    if (res) {
+      alert("Login successful!");
+    } else if (error) {
+      alert("Login failed: " + error.message);
+    }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -85,7 +102,7 @@ export default function LoginPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-[38px] cursor-pointer text-gray-500"
               >
-                {showPassword ? "🙈" : "👁️"}
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
 

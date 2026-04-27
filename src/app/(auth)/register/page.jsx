@@ -3,6 +3,7 @@ import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function RegisterPage() {
    const router = useRouter();
@@ -145,7 +146,7 @@ export default function RegisterPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-[38px] cursor-pointer text-gray-500"
               >
-                {showPassword ? "🙈" : "👁️"}
+                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
 
