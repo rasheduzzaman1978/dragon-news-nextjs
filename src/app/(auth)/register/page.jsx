@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
    const router = useRouter();
@@ -20,24 +21,37 @@ export default function RegisterPage() {
 
   const { name, email, password } = data;
 
-  const { data: res, error } = await authClient.signUp.email({
-    name,
-    email,
-    password,
-    image: data.photo,
-    callbackURL: "/",
-  });
+  try {
+    // 🔐 Register API call
+    const res = await authClient.signUp.email({
+      name,
+      email,
+      password,
+      image: data.photo,
+      callbackURL: "/",
+    });
 
-  console.log("RES:", res);
-  console.log("ERROR:", error);
+    console.log("FULL RESPONSE:", res);
 
-  if (res) {
-    alert("Registration successful! Please check your email to verify your account.");
-    router.push("/login");
-  }
+    // ❌ যদি error থাকে
+    if (res?.error) {
+      toast.error(res.error.message || "Registration failed ❌");
+      return;
+    }
 
-  if (error) {
-    alert("Registration failed: " + error.message);
+    // ✅ success
+    toast.success("Registration successful 🎉");
+
+    // 👉 redirect delay দিয়ে দিলে UX better হয়
+    setTimeout(() => {
+      router.push("/login");
+    }, 1500);
+
+  } catch (error) {
+    console.error("Register Error:", error);
+
+    // ❌ unexpected error
+    toast.error("Something went wrong ❌");
   }
 };
 

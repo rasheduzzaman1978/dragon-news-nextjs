@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
   const {
@@ -15,23 +16,33 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleLoginFunc = async (data) => {
-    console.log(data, "Login Data");
+  console.log(data, "Login Data");
 
-    const { data: res, error } = await authClient.signIn.email({
-    email: data.email, // required
-    password: data.password, // required
-    rememberMe: true,
-    callbackURL: '/',
-  });
+  try {
+    // 🔐 API call (email/password login)
+    const res = await authClient.signIn.email({
+      email: data.email,
+      password: data.password,
+      rememberMe: true,
+      callbackURL: "/", // 👉 login success হলে redirect
+    });
 
-    console.log("RES:", res);
-    console.log("ERROR:", error);
-    if (res) {
-      alert("Login successful!");
-    } else if (error) {
-      alert("Login failed: " + error.message);
+    console.log("FULL RESPONSE:", res);
+
+    // ❌ যদি error থাকে
+    if (res?.error) {
+      toast.error(res.error.message || "Login failed ❌");
+      return;
     }
-    console.log("LOGIN RES:", res);
+
+    // ✅ login success
+    toast.success("Login successful 🎉");
+
+  } catch (err) {
+    // ❌ unexpected error (server crash / network issue)
+    console.error("Login Error:", err);
+    toast.error("Something went wrong ❌");
+  }
 };
 
   return (

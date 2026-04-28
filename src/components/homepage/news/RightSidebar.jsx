@@ -13,15 +13,19 @@ import swimmingImg from "@/assets/swimming.png";
 import classImg from "@/assets/class.png";
 import playgroundImg from "@/assets/playground.png";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 const RightSidebar = () => {
   
   const [providerLoading, setProviderLoading] = useState(null);
 
-  // ✅ Google Login
-  const handleGoogleLogin = async () => {
+ // ✅ Google Login
+const handleGoogleLogin = async () => {
   try {
     setProviderLoading("google");
+
+    // 🔔 start toast
+    toast.info("Redirecting to Google... 🔄");
 
     await authClient.signIn.social({
       provider: "google",
@@ -30,14 +34,21 @@ const RightSidebar = () => {
 
   } catch (error) {
     console.error("Google Login Error:", error);
+
+    // ❌ error toast
+    toast.error("Google login failed ❌");
   } finally {
     setProviderLoading(null);
   }
 };
 
+// ✅ GitHub Login
 const handleGithubLogin = async () => {
   try {
     setProviderLoading("github");
+
+    // 🔔 start toast
+    toast.info("Redirecting to GitHub... 🔄");
 
     await authClient.signIn.social({
       provider: "github",
@@ -46,6 +57,9 @@ const handleGithubLogin = async () => {
 
   } catch (error) {
     console.error("GitHub Login Error:", error);
+
+    // ❌ error toast
+    toast.error("GitHub login failed ❌");
   } finally {
     setProviderLoading(null);
   }
