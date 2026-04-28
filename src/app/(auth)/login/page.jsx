@@ -36,7 +36,7 @@ export default function LoginPage() {
     }
 
     // ✅ login success
-    toast.success("Login successful 🎉");
+    // toast.success("Login successful 🎉");
 
   } catch (err) {
     // ❌ unexpected error (server crash / network issue)

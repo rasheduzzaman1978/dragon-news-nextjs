@@ -40,7 +40,7 @@ export default function RegisterPage() {
     }
 
     // ✅ success
-    toast.success("Registration successful 🎉");
+    // toast.success("Registration successful 🎉");
 
     // 👉 redirect delay দিয়ে দিলে UX better হয়
     setTimeout(() => {
