@@ -1,5 +1,7 @@
 import "./globals.css";
 import { Montserrat, Poppins } from "next/font/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,6 +31,12 @@ export default function RootLayout({ children }) {
         <main className="grow">
           {children}
         </main>
+        {/* 🔥 Toast Container */}
+        <ToastContainer
+          position="top-center"
+          autoClose={1500}
+          theme="colored"
+        />
       </body>
     </html>
   );

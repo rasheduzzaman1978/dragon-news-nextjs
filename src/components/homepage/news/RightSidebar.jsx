@@ -15,47 +15,41 @@ import playgroundImg from "@/assets/playground.png";
 import { authClient } from "@/lib/auth-client";
 
 const RightSidebar = () => {
-  const [loading, setLoading] = useState(false);
+  
+  const [providerLoading, setProviderLoading] = useState(null);
 
   // ✅ Google Login
   const handleGoogleLogin = async () => {
-    try {
-      setLoading(true);
+  try {
+    setProviderLoading("google");
 
-      const data = await authClient.signIn.social({
-        provider: "google",
-      });
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/",
+    });
 
-      console.log("Google SignIn Response:", data);
+  } catch (error) {
+    console.error("Google Login Error:", error);
+  } finally {
+    setProviderLoading(null);
+  }
+};
 
-      // 👉 এখানে চাইলে redirect করতে পারো
-      // window.location.href = "/";
+const handleGithubLogin = async () => {
+  try {
+    setProviderLoading("github");
 
-    } catch (error) {
-      console.error("Google Login Error:", error);
-      alert("Google login failed!");
-    } finally {
-      setLoading(false);
-    }
-  };
+    await authClient.signIn.social({
+      provider: "github",
+      callbackURL: "/",
+    });
 
-  // ✅ GitHub Login (optional add)
-  const handleGithubLogin = async () => {
-    try {
-      setLoading(true);
-
-      const data = await authClient.signIn.social({
-        provider: "github",
-      });
-
-      console.log("GitHub SignIn Response:", data);
-    } catch (error) {
-      console.error("GitHub Login Error:", error);
-      alert("GitHub login failed!");
-    } finally {
-      setLoading(false);
-    }
-  };
+  } catch (error) {
+    console.error("GitHub Login Error:", error);
+  } finally {
+    setProviderLoading(null);
+  }
+};
 
   return (
     <div className="space-y-6">
@@ -67,20 +61,20 @@ const RightSidebar = () => {
         <div className="flex flex-col gap-2">
           <button
             onClick={handleGoogleLogin}
-            disabled={loading}
+            disabled={providerLoading !== null}
             className="flex items-center justify-center gap-2 bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600 disabled:opacity-50"
           >
             <FaGoogle />
-            {loading ? "Loading..." : "Google"}
+            {providerLoading === "google" ? "Loading..." : "Google"}
           </button>
 
           <button
             onClick={handleGithubLogin}
-            disabled={loading}
+            disabled={providerLoading !== null}
             className="flex items-center justify-center gap-2 bg-gray-800 text-white px-3 py-2 rounded-md hover:bg-gray-900 disabled:opacity-50"
           >
             <FaGithub />
-            {loading ? "Loading..." : "GitHub"}
+            {providerLoading === "github" ? "Loading..." : "GitHub"}
           </button>
         </div>
       </div>

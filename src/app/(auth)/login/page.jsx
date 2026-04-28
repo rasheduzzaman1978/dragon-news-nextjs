@@ -31,6 +31,7 @@ export default function LoginPage() {
     } else if (error) {
       alert("Login failed: " + error.message);
     }
+    console.log("LOGIN RES:", res);
 };
 
   return (

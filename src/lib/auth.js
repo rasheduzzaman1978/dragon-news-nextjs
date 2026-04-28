@@ -8,7 +8,7 @@ if (!uri) {
   throw new Error("MONGO_URI is not defined");
 }
 
-// ✅ global cache (Next.js safe)
+// ✅ global cache (VERY IMPORTANT)
 let client;
 let clientPromise;
 
@@ -19,26 +19,31 @@ if (!global._mongoClientPromise) {
 
 clientPromise = global._mongoClientPromise;
 
-const clientConn = await clientPromise;
-const db = clientConn.db("dragonNews-db");
+// ✅ FIXED createAuth
+export const createAuth = async () => {
+  const clientConn = await clientPromise;
+  const db = clientConn.db("dragonNews-db");
 
-export const auth = betterAuth({
-  database: mongodbAdapter(db, {
-    client: clientConn,
-  }),
+  return betterAuth({
+    database: mongodbAdapter(db, {
+      client: clientConn,
+    }),
 
-  emailAndPassword: {
-    enabled: true,
-  },
-
-  // ✅ Google OAuth (JS version)
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    emailAndPassword: {
+      enabled: true,
     },
-  },
 
-  // optional but useful
-  trustedOrigins: ["http://localhost:3000"],
-});
+    socialProviders: {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      },
+      github: {
+        clientId: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      },
+    },
+
+    trustedOrigins: ["http://localhost:3000"],
+  });
+};
